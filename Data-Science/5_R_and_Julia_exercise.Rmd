@@ -1,0 +1,54 @@
+---
+title: "5_R_and_Julia_exercise"
+output: html_document
+date: "2023-05-18"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(readr)
+library(datasets)
+```
+
+## 5_R_and_Julia_exercise
+
+
+```{r iris}
+Iris <- iris
+summary(Iris)
+head(Iris)
+```
+
+## Scatter Plot
+
+
+```{r}
+ggplot(data=iris,aes(x=Sepal.Length, y=Sepal.Width, color=Species)) + geom_point() + theme_minimal() 
+```
+
+```{r}
+ggplot(data=iris,aes(x=Sepal.Length, y=Sepal.Width)) + geom_point() + theme_minimal() + geom_smooth() 
+
+```
+
+```{r}
+#pearson_cor <- cor(iris.Sepal.Length,iris.Sepal.Width)
+#print(pearson_cor)
+```
+
+## Box Plot
+
+```{r}
+options(repr.plot.width = 5, repr.plot.height = 4)
+
+ggplot(data=iris,aes(x=Species, y=Petal.Width, color=Species)) + geom_boxplot() + theme_minimal()  + theme(legend.position="none")
+```
+
+## Histogram
+
+```{r}
+options(repr.plot.width = 5, repr.plot.height = 4)
+
+ggplot(data=iris,aes(x=Petal.Width,fill=Species)) + geom_histogram(binwidth=0.1) + theme_minimal() 
+```
