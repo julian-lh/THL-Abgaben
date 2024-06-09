@@ -204,12 +204,12 @@
         // }
 
 
-        async function loadOrCreateModel(modelUrl, createModelFunction) {
+        async function loadModel(modelUrl) {
             try {
                 return await tf.loadLayersModel(modelUrl);
             } catch (error) {
-                console.warn(`Model at ${modelUrl} not found, creating a new one.`);
-                return createModelFunction();
+                console.warn(`Model at ${modelUrl} not found`);
+                return
             }
         }
         async function init() {
@@ -217,25 +217,22 @@
             const { trainX, trainY, trainNoisyY, testX, testY, testNoisyY } = generateAndDisplayDatasets();
 
             // Model 1
-            const model1 = await loadOrCreateModel('./models/model-prediction-noise-free', createModel);
-            if (model1.isTrainingRequired) {
-                await trainModel(model1, trainX, trainY, trainY, 'prediction-noise-free', 80);
+            const model1 = await loadModel('./models/model-prediction-noise-free');
+            if (model1 != null) {
+                await plotAndEvaluateModel(model1, trainX, trainY, testX, testY, 'prediction-noise-free');
             }
-            await plotAndEvaluateModel(model1, trainX, trainY, testX, testY, 'prediction-noise-free');
 
             // Model 2
-            const model2 = await loadOrCreateModel('./models/model-prediction-best-fit', createModel);
-            if (model2.isTrainingRequired) {
-                await trainModel(model2, trainX, trainNoisyY, trainNoisyY, 'prediction-best-fit', 80);
+            const model2 = await loadModel('./models/model-prediction-best-fit');
+            if (model2 != null) {
+                await plotAndEvaluateModel(model2, trainX, trainY, testX, testY, 'prediction-best-fit');
             }
-            await plotAndEvaluateModel(model2, trainX, trainY, testX, testY, 'prediction-best-fit');
 
             // Model 3
-            const model3 = await loadOrCreateModel('./models/model-prediction-overfit', createModel2);
-            if (model3.isTrainingRequired) {
-                await trainModel(model3, trainX, trainNoisyY, trainNoisyY, 'prediction-overfit', 500);
+            const model3 = await loadModel('./models/model-prediction-overfit');
+            if (model3 != null) {
+                await plotAndEvaluateModel(model2, trainX, trainY, testX, testY, 'prediction-overfit');
             }
-            await plotAndEvaluateModel(model3, trainX, trainY, testX, testY, 'prediction-overfit');
         }
 
         window.onload = init;
