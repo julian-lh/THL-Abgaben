@@ -6,8 +6,8 @@ function createModel() {
     model.add(tf.layers.dense({ inputShape: [1], units: 1, useBias: true }));
 
     // Adding hidden layers
-    model.add(tf.layers.dense({ units: 100, activation: 'ReLU' }));
-    model.add(tf.layers.dense({ units: 100, activation: 'ReLU' }));
+    model.add(tf.layers.dense({ units: 100, activation: 'relu' }));
+    model.add(tf.layers.dense({ units: 100, activation: 'relu' }));
 
     // Add an output layer
     model.add(tf.layers.dense({ units: 1, activation: 'linear' }));
@@ -23,10 +23,10 @@ function createModel2() {
     model.add(tf.layers.dense({ inputShape: [1], units: 1, useBias: true }));
 
     // Adding hidden layers
-    model.add(tf.layers.dense({ units: 100, activation: 'ReLU' }));
-    model.add(tf.layers.dense({ units: 100, activation: 'ReLU' }));
-    model.add(tf.layers.dense({ units: 100, activation: 'ReLU' }));
-    model.add(tf.layers.dense({ units: 100, activation: 'ReLU' }));
+    model.add(tf.layers.dense({ units: 100, activation: 'relu' }));
+    model.add(tf.layers.dense({ units: 100, activation: 'relu' }));
+    model.add(tf.layers.dense({ units: 100, activation: 'relu' }));
+    model.add(tf.layers.dense({ units: 100, activation: 'relu' }));
 
     // Add an output layer
     model.add(tf.layers.dense({ units: 1, activation: 'linear' }));
