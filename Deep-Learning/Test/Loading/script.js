@@ -13,7 +13,14 @@ async function generateData(N, noiseVar = 0.05) {
 
 async function loadModel(modelUrl) {
     try {
-        return await tf.loadLayersModel(modelUrl);
+        const model = await tf.loadLayersModel(modelUrl);
+        // Compile the model after loading
+        model.compile({
+            optimizer: tf.train.adam(0.01),
+            loss: tf.losses.meanSquaredError,
+            metrics: ['mse'],
+        });
+        return model;
     } catch (error) {
         console.warn(`Model at ${modelUrl} not found`);
         return null;
