@@ -2,7 +2,7 @@
     "modelTopology": {
         "class_name": "Sequential",
         "config": {
-            "name": "sequential_1",
+            "name": "sequential_2",
             "layers": [
                 {
                     "class_name": "Dense",
@@ -28,7 +28,7 @@
                         "activity_regularizer": null,
                         "kernel_constraint": null,
                         "bias_constraint": null,
-                        "name": "dense_Dense1",
+                        "name": "dense_Dense5",
                         "trainable": true,
                         "batch_input_shape": [
                             null,
@@ -61,7 +61,7 @@
                         "activity_regularizer": null,
                         "kernel_constraint": null,
                         "bias_constraint": null,
-                        "name": "dense_Dense2",
+                        "name": "dense_Dense6",
                         "trainable": true
                     }
                 },
@@ -89,7 +89,7 @@
                         "activity_regularizer": null,
                         "kernel_constraint": null,
                         "bias_constraint": null,
-                        "name": "dense_Dense3",
+                        "name": "dense_Dense7",
                         "trainable": true
                     }
                 },
@@ -117,7 +117,7 @@
                         "activity_regularizer": null,
                         "kernel_constraint": null,
                         "bias_constraint": null,
-                        "name": "dense_Dense4",
+                        "name": "dense_Dense8",
                         "trainable": true
                     }
                 }
@@ -132,11 +132,11 @@
     "weightsManifest": [
         {
             "paths": [
-                "./model-prediction-noise-free.weights.bin"
+                "./model-prediction-best-fit.weights.bin"
             ],
             "weights": [
                 {
-                    "name": "dense_Dense1/kernel",
+                    "name": "dense_Dense5/kernel",
                     "shape": [
                         1,
                         1
@@ -144,14 +144,14 @@
                     "dtype": "float32"
                 },
                 {
-                    "name": "dense_Dense1/bias",
+                    "name": "dense_Dense5/bias",
                     "shape": [
                         1
                     ],
                     "dtype": "float32"
                 },
                 {
-                    "name": "dense_Dense2/kernel",
+                    "name": "dense_Dense6/kernel",
                     "shape": [
                         1,
                         100
@@ -159,14 +159,14 @@
                     "dtype": "float32"
                 },
                 {
-                    "name": "dense_Dense2/bias",
+                    "name": "dense_Dense6/bias",
                     "shape": [
                         100
                     ],
                     "dtype": "float32"
                 },
                 {
-                    "name": "dense_Dense3/kernel",
+                    "name": "dense_Dense7/kernel",
                     "shape": [
                         100,
                         100
@@ -174,14 +174,14 @@
                     "dtype": "float32"
                 },
                 {
-                    "name": "dense_Dense3/bias",
+                    "name": "dense_Dense7/bias",
                     "shape": [
                         100
                     ],
                     "dtype": "float32"
                 },
                 {
-                    "name": "dense_Dense4/kernel",
+                    "name": "dense_Dense8/kernel",
                     "shape": [
                         100,
                         1
@@ -189,7 +189,7 @@
                     "dtype": "float32"
                 },
                 {
-                    "name": "dense_Dense4/bias",
+                    "name": "dense_Dense8/bias",
                     "shape": [
                         1
                     ],
