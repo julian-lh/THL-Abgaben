@@ -209,7 +209,7 @@
                 return await tf.loadLayersModel(modelUrl);
             } catch (error) {
                 console.warn(`Model at ${modelUrl} not found`);
-                return
+                return null
             }
         }
         async function init() {
@@ -217,19 +217,19 @@
             const { trainX, trainY, trainNoisyY, testX, testY, testNoisyY } = generateAndDisplayDatasets();
 
             // Model 1
-            const model1 = await loadModel(`./models/model-prediction-noise-free`);
-            if (model1 != null) {
+            const model1 = await loadModel(`./models/model-prediction-noise-free/model.json`);
+            if (model1 != null && model1 != undefined) {
                 await plotAndEvaluateModel(model1, trainX, trainY, testX, testY, 'prediction-noise-free');
             }
 
             // Model 2
-            const model2 = await loadModel(`./models/model-prediction-best-fit`);
+            const model2 = await loadModel(`./models/model-prediction-best-fit/model.json`);
             if (model2 != null) {
                 await plotAndEvaluateModel(model2, trainX, trainY, testX, testY, 'prediction-best-fit');
             }
 
             // Model 3
-            const model3 = await loadModel(`./models/model-prediction-overfit`);
+            const model3 = await loadModel(`./models/model-prediction-overfit/model.json`);
             if (model3 != null) {
                 await plotAndEvaluateModel(model2, trainX, trainY, testX, testY, 'prediction-overfit');
             }
