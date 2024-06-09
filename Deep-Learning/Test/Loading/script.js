@@ -70,7 +70,7 @@ async function run() {
 
     plotData(trainX, trainY, testX, testY);
 
-    const modelUrl = './my-model.json'; // Update this path to your actual model path
+    const modelUrl = 'https://julian-lh.github.io/THL-Abgaben/Deep-Learning/Test/Loading/my-model.json'; // Update this path to your actual model path
     const model = await loadModel(modelUrl);
 
     if (model) {
