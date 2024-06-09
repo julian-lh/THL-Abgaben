@@ -180,30 +180,6 @@
             insertEvaluationResults(`${idPrefix}-test-loss`, `${idPrefix}-test-mse`, testLoss, testMse);
         }
 
-        // async function init() {
-        //     // Generate and Plot Data
-        //     const { trainX, trainY, trainNoisyY, testX, testY, testNoisyY } = generateAndDisplayDatasets();
-
-        //     // Model 1
-        //     var model1 = await tf.loadLayersModel('./models/model-prediction-noise-free.json');
-        //     if (model1 == null) {
-        //         const model1 = createModel();
-        //         await trainModel(model1, trainX, trainY, trainY, 'prediction-noise-free', 80);
-        //     }
-        //     plotAndEvaluateModel(model1, trainX, trainY, testX, testY, 'prediction-noise-free')
-
-        //     // Model 2
-        //     const model2 = createModel();
-        //     await trainModel(model2, trainX, trainNoisyY, trainNoisyY, 'prediction-best-fit', 80);
-        //     plotAndEvaluateModel(model2, trainX, trainY, testX, testY, 'prediction-best-fit');
-
-        //     // Model 3
-        //     const model3 = createModel2();
-        //     await trainModel(model3, trainX, trainNoisyY, trainNoisyY, 'prediction-overfit', 500);
-        //     plotAndEvaluateModel(model3, trainX, trainY, testX, testY, 'prediction-overfit');
-        // }
-
-
         async function loadModel(modelUrl) {
             try {
                 return await tf.loadLayersModel(modelUrl);
@@ -217,19 +193,19 @@
             const { trainX, trainY, trainNoisyY, testX, testY, testNoisyY } = generateAndDisplayDatasets();
 
             // Model 1
-            const model1 = await loadModel(`./models/model-prediction-noise-free/model.json`);
+            const model1 = await loadModel(`https://julian-lh.github.io/THL-Abgaben/Deep-Learning/models/model-prediction-noise-free.json`);
             if (model1 != null && model1 != undefined) {
                 await plotAndEvaluateModel(model1, trainX, trainY, testX, testY, 'prediction-noise-free');
             }
 
             // Model 2
-            const model2 = await loadModel(`./models/model-prediction-best-fit/model.json`);
+            const model2 = await loadModel(`https://julian-lh.github.io/THL-Abgaben/Deep-Learning/models/model-prediction-best-fit.json`);
             if (model2 != null) {
                 await plotAndEvaluateModel(model2, trainX, trainY, testX, testY, 'prediction-best-fit');
             }
 
             // Model 3
-            const model3 = await loadModel(`./models/model-prediction-overfit/model.json`);
+            const model3 = await loadModel(`https://julian-lh.github.io/THL-Abgaben/Deep-Learning/models/model-prediction-overfit.json`);
             if (model3 != null) {
                 await plotAndEvaluateModel(model2, trainX, trainY, testX, testY, 'prediction-overfit');
             }
