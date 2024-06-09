@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Regression mit TensorFlow.js</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+    <script src="https://cdn.plot.ly/plotly-2.32.0.min.js" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis@1.0.2/dist/tfjs-vis.umd.min.js"></script>
+    <script src="plotting.js"></script>
+    <script src="dataGeneration.js"></script>
+    <script src="modelTraining.js"></script>
+    <style>
+        body {
+            font-family: Helvetica, sans-serif;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .plot-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .plot {
+            width: 48%;
+        }
+
+        .plot h3 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Regression mit TensorFlow.js</h1>
+
+    <!-- Datensätze -->
+    <h2>Datensätze</h2>
+    <div class="container">
+        <div class="plot-container">
+            <div class="plot">
+                <h3>Datensatz</h3>
+                <div id="dataset"></div>
+            </div>
+            <div class="plot">
+                <h3>Datensatz mit Rauschen</h3>
+                <div id="dataset-noisy"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vorhersagen ohne Rauschen -->
+    <h2>Vorhersagen ohne Rauschen</h2>
+    <div class="container">
+        <div class="plot-container">
+            <div class="plot">
+                <h3>Trainingsdaten</h3>
+                <div id="prediction-noise-free-train"></div>
+                <p>
+                    Loss: <span id="prediction-noise-free-train-loss"></span></br>
+                    Mean Squared Error: <span id="prediction-noise-free-train-mse"></span>
+                </p>
+            </div>
+            <div class="plot">
+                <h3>Testdaten</h3>
+                <div id="prediction-noise-free-test"></div>
+                <p>
+                    Loss: <span id="prediction-noise-free-test-loss"></span></br>
+                    Mean Squared Error: <span id="prediction-noise-free-test-mse"></span>
+                </p>
+            </div>
+        </div>
+        <button id="prediction-noise-free-download-button">Download</button>
+    </div>
+
+    <!-- Vorhersagen Best-Fit Modell -->
+    <h2>Vorhersagen Best-Fit Modell</h2>
+    <div class="container">
+        <div class="plot-container">
+            <div class="plot">
+                <h3>Trainingsdaten</h3>
+                <div id="prediction-best-fit-train"></div>
+                <p>
+                    Loss: <span id="prediction-best-fit-train-loss"></span></br>
+                    Mean Squared Error: <span id="prediction-best-fit-train-mse"></span>
+                </p>
+            </div>
+            <div class="plot">
+                <h3>Testdaten</h3>
+                <div id="prediction-best-fit-test"></div>
+                <p>
+                    Loss: <span id="prediction-best-fit-test-loss"></span></br>
+                    Mean Squared Error: <span id="prediction-best-fit-test-mse"></span>
+                </p>
+            </div>
+        </div>
+        <button id="prediction-best-fit-download-button">Download</button>
+    </div>
+
+    <!-- Vorhersagen Over-Fit Modell -->
+    <h2>Vorhersagen Over-Fit Modell</h2>
+    <div class="container">
+        <div class="plot-container">
+            <div class="plot">
+                <h3>Trainingsdaten</h3>
+                <div id="prediction-overfit-train"></div>
+                <p>
+                    Loss: <span id="prediction-overfit-train-loss"></span></br>
+                    Mean Squared Error: <span id="prediction-overfit-train-mse"></span>
+                </p>
+            </div>
+            <div class="plot">
+                <h3>Testdaten</h3>
+                <div id="prediction-overfit-test"></div>
+                <p>
+                    Loss: <span id="prediction-overfit-test-loss"></span></br>
+                    Mean Squared Error: <span id="prediction-overfit-test-mse"></span>
+                </p>
+            </div>
+        </div>
+        <button id="prediction-overfit-download-button">Download</button>
+    </div>
+
+    <!-- Diskussion und Dokumentation -->
+    <div id="discussion">
+        <h2>Diskussion</h2>
+        <p><!-- Fügen Sie hier Ihre Diskussion ein --></p>
+    </div>
+
+    <div id="documentation">
+        <h2>Dokumentation</h2>
+        <h3>Technisch</h3>
+        <p><!-- Liste der verwendeten Frameworks und technische Besonderheiten --></p>
+        <h3>Fachlich</h3>
+        <p><!-- Erläuterung der Implementierung und wichtige Aspekte der Lösung --></p>
+    </div>
+
+    <script>
+        function generateAndDisplayDatasets() {
+            const data = generateData();
+            const { trainX, trainY, trainNoisyY, testX, testY, testNoisyY } = data;
+
+            drawPairPlot('dataset', trainX, trainY, testX, testY, 'Training', 'Test');
+            drawPairPlot('dataset-noisy', trainX, trainNoisyY, testX, testNoisyY, 'Training', 'Test');
+            return data;
+        }
+
+        function insertEvaluationResults(elementLoss, elementMse, loss, mse) {
+            document.getElementById(elementLoss).textContent = loss;
+            document.getElementById(elementMse).textContent = mse;
+        }
+
+        async function trainModel(model, trainX, trainY, trainNoisyY, idPrefix, epochs) {
+            await convertAndTrainModel(model, trainX, trainNoisyY, epochs);
+
+            const downloadButton = document.getElementById(`${idPrefix}-download-button`);
+            if (downloadButton) {
+                downloadButton.addEventListener(`click`, async function () {
+                    await model.save(`downloads://model-${idPrefix}`);
+                });
+            }
+        }
+
+        function plotAndEvaluateModel(model, trainX, trainY, testX, testY, idPrefix) {
+            // Prediction for train data
+            const trainPredictions = getPrediction(model, trainX);
+            drawPlot(`${idPrefix}-train`, trainX, trainPredictions, idPrefix, 'blue');
+            const { loss: trainLoss, mse: trainMse } = evaluateModel(model, trainX, trainY);
+            insertEvaluationResults(`${idPrefix}-train-loss`, `${idPrefix}-train-mse`, trainLoss, trainMse);
+
+            // Prediction for test data
+            const testPredictions = getPrediction(model, testX);
+            drawPlot(`${idPrefix}-test`, testX, testPredictions, idPrefix, 'orange');
+            const { loss: testLoss, mse: testMse } = evaluateModel(model, testX, testY);
+            insertEvaluationResults(`${idPrefix}-test-loss`, `${idPrefix}-test-mse`, testLoss, testMse);
+        }
+
+        async function init() {
+            // Generate and Plot Data
+            const { trainX, trainY, trainNoisyY, testX, testY, testNoisyY } = generateAndDisplayDatasets();
+
+            // Model 1
+            var model1 = await tf.loadLayersModel('./models/model-prediction-noise-free.json');
+            if (model1 == null) {
+                const model1 = createModel();
+                await trainModel(model1, trainX, trainY, trainY, 'prediction-noise-free', 80);
+            }
+            plotAndEvaluateModel(model1, trainX, trainY, testX, testY, 'prediction-noise-free')
+
+            // Model 2
+            const model2 = createModel();
+            await trainModel(model2, trainX, trainNoisyY, trainNoisyY, 'prediction-best-fit', 80);
+            plotAndEvaluateModel(model2, trainX, trainY, testX, testY, 'prediction-best-fit');
+
+            // Model 3
+            const model3 = createModel2();
+            await trainModel(model3, trainX, trainNoisyY, trainNoisyY, 'prediction-overfit', 500);
+            plotAndEvaluateModel(model3, trainX, trainY, testX, testY, 'prediction-overfit');
+        }
+
+        window.onload = init;
+    </script>
+</body>
+
+</html>
