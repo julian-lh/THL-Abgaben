@@ -162,7 +162,7 @@ async function run() {
     // Training noisy Daten (Best-Fit)
     const modelNoisyBestFit = createModel2();
     document.getElementById('spinner-best-fit').classList.remove('d-none');
-    const historyNoisyBestFit = await trainModel(modelNoisyBestFit, xTrainTensor, yTrainNoisyTensor, 80, xTestTensor, yTestNoisyTensor);
+    const historyNoisyBestFit = await trainModel(modelNoisyBestFit, xTrainTensor, yTrainNoisyTensor, 120, xTestTensor, yTestNoisyTensor);
     document.getElementById('spinner-best-fit').classList.add('d-none');
     const mseNoisyBestFitTrain = historyNoisyBestFit.history.loss[historyNoisyBestFit.history.loss.length - 1];
     const mseNoisyBestFitTest = historyNoisyBestFit.history.val_loss[historyNoisyBestFit.history.val_loss.length - 1];
@@ -176,7 +176,7 @@ async function run() {
     // Training noisy Daten (Over-Fit)
     const modelNoisyOverFit = createModel2();
     document.getElementById('spinner-overfit').classList.remove('d-none');
-    const historyNoisyOverFit = await trainModel(modelNoisyOverFit, xTrainTensor, yTrainNoisyTensor, 500, xTestTensor, yTestNoisyTensor);
+    const historyNoisyOverFit = await trainModel(modelNoisyOverFit, xTrainTensor, yTrainNoisyTensor, 1000, xTestTensor, yTestNoisyTensor);
     document.getElementById('spinner-overfit').classList.add('d-none');
     const mseNoisyOverFitTrain = historyNoisyOverFit.history.loss[historyNoisyOverFit.history.loss.length - 1];
     const mseNoisyOverFitTest = historyNoisyOverFit.history.val_loss[historyNoisyOverFit.history.val_loss.length - 1];
