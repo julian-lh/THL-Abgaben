@@ -51,8 +51,7 @@ function createModel() {
 
 function createModel2() {
     const model = tf.sequential();
-    model.add(tf.layers.dense({ units: 100, activation: 'relu', inputShape: [1] }));
-    model.add(tf.layers.dense({ units: 100, activation: 'relu' }));
+    model.add(tf.layers.dense({ units: 40, activation: 'relu', inputShape: [1] }));
     model.add(tf.layers.dense({ units: 100, activation: 'relu' }));
     model.add(tf.layers.dense({ units: 100, activation: 'relu' }));
     model.add(tf.layers.dense({ units: 1, activation: 'linear' }));
@@ -70,14 +69,14 @@ async function trainModel(model, xTrain, yTrain, epochs, xTest, yTest) {
     });
 }
 
-function plotData(divId, xTrain, yTrain, xTest, yTest, title) {
+function plotData(divId, xTrain, yTrain, xTest, yTest, title, colorTrain = 'cyan', colorTest = 'red') {
     const traceTrain = {
         x: xTrain,
         y: yTrain,
         mode: 'markers',
         type: 'scatter',
         name: 'Train',
-        marker: { color: 'blue' }
+        marker: { color: colorTrain }
     };
 
     const traceTest = {
@@ -86,7 +85,7 @@ function plotData(divId, xTrain, yTrain, xTest, yTest, title) {
         mode: 'markers',
         type: 'scatter',
         name: 'Test',
-        marker: { color: 'red' }
+        marker: { color: colorTest }
     };
 
     const layout = {
@@ -98,7 +97,7 @@ function plotData(divId, xTrain, yTrain, xTest, yTest, title) {
     Plotly.newPlot(divId, [traceTrain, traceTest], layout);
 }
 
-function plotPredictions(divId, model, xData, yData, title, mse, loss) {
+function plotPredictions(divId, model, xData, yData, title, mse, loss, colorActual = 'blue', colorPred = 'red') {
     const preds = model.predict(tf.tensor2d(xData, [xData.length, 1])).arraySync();
 
     const traceActual = {
@@ -107,7 +106,7 @@ function plotPredictions(divId, model, xData, yData, title, mse, loss) {
         mode: 'markers',
         type: 'scatter',
         name: 'Actual',
-        marker: { color: 'blue' }
+        marker: { color: colorActual }
     };
 
     const tracePred = {
@@ -116,7 +115,7 @@ function plotPredictions(divId, model, xData, yData, title, mse, loss) {
         mode: 'markers',
         type: 'scatter',
         name: 'Prediction',
-        line: { color: 'red' }
+        line: { color: colorPred }
     };
 
     const layout = {
@@ -143,16 +142,18 @@ async function run() {
     const yTestNoisyTensor = tf.tensor2d(yTestNoisy, [yTestNoisy.length, 1]);
 
     // Plotten
-    plotData('data-plot-clean', xTrain, yTrain, xTest, yTest, '(Clean)');
-    plotData('data-plot-noisy', xTrain, yTrainNoisy, xTest, yTestNoisy, '(Noisy)');
+    plotData('data-plot-clean', xTrain, yTrain, xTest, yTest, '(Clean)', 'black', 'lightgray');
+    plotData('data-plot-noisy', xTrain, yTrainNoisy, xTest, yTestNoisy, '(Noisy)', 'blue', 'cyan');
 
     // Training clean Daten
     const modelClean = createModel();
+    document.getElementById('spinner-clean').classList.remove('d-none');
     const historyClean = await trainModel(modelClean, xTrainTensor, yTrainTensor, 100, xTestTensor, yTestTensor);
+    document.getElementById('spinner-clean').classList.add('d-none');
     const mseCleanTrain = historyClean.history.loss[historyClean.history.loss.length - 1];
     const mseCleanTest = historyClean.history.val_loss[historyClean.history.val_loss.length - 1];
-    plotPredictions('prediction-clean-train', modelClean, xTrain, yTrain, 'Training Data', mseCleanTrain, mseCleanTrain);
-    plotPredictions('prediction-clean-test', modelClean, xTest, yTest, 'Test Data', mseCleanTest, mseCleanTest);
+    plotPredictions('prediction-clean-train', modelClean, xTrain, yTrain, 'Training Data', mseCleanTrain, mseCleanTrain, 'black');
+    plotPredictions('prediction-clean-test', modelClean, xTest, yTest, 'Test Data', mseCleanTest, mseCleanTest, 'gray');
 
     document.getElementById('download-model-clean').addEventListener('click', () => {
         modelClean.save('downloads://clean-model');
@@ -160,11 +161,13 @@ async function run() {
 
     // Training noisy Daten (Best-Fit)
     const modelNoisyBestFit = createModel2();
-    const historyNoisyBestFit = await trainModel(modelNoisyBestFit, xTrainTensor, yTrainNoisyTensor, 50, xTestTensor, yTestNoisyTensor);
+    document.getElementById('spinner-best-fit').classList.remove('d-none');
+    const historyNoisyBestFit = await trainModel(modelNoisyBestFit, xTrainTensor, yTrainNoisyTensor, 80, xTestTensor, yTestNoisyTensor);
+    document.getElementById('spinner-best-fit').classList.add('d-none');
     const mseNoisyBestFitTrain = historyNoisyBestFit.history.loss[historyNoisyBestFit.history.loss.length - 1];
     const mseNoisyBestFitTest = historyNoisyBestFit.history.val_loss[historyNoisyBestFit.history.val_loss.length - 1];
     plotPredictions('prediction-best-train', modelNoisyBestFit, xTrain, yTrainNoisy, 'Training Data', mseNoisyBestFitTrain, mseNoisyBestFitTrain);
-    plotPredictions('prediction-best-test', modelNoisyBestFit, xTest, yTestNoisy, 'Test Data', mseNoisyBestFitTest, mseNoisyBestFitTest);
+    plotPredictions('prediction-best-test', modelNoisyBestFit, xTest, yTestNoisy, 'Test Data', mseNoisyBestFitTest, mseNoisyBestFitTest, 'cyan');
 
     document.getElementById('download-model-best-fit').addEventListener('click', () => {
         modelNoisyBestFit.save('downloads://best-fit-model');
@@ -172,11 +175,13 @@ async function run() {
 
     // Training noisy Daten (Over-Fit)
     const modelNoisyOverFit = createModel2();
-    const historyNoisyOverFit = await trainModel(modelNoisyOverFit, xTrainTensor, yTrainNoisyTensor, 200, xTestTensor, yTestNoisyTensor);
+    document.getElementById('spinner-overfit').classList.remove('d-none');
+    const historyNoisyOverFit = await trainModel(modelNoisyOverFit, xTrainTensor, yTrainNoisyTensor, 500, xTestTensor, yTestNoisyTensor);
+    document.getElementById('spinner-overfit').classList.add('d-none');
     const mseNoisyOverFitTrain = historyNoisyOverFit.history.loss[historyNoisyOverFit.history.loss.length - 1];
     const mseNoisyOverFitTest = historyNoisyOverFit.history.val_loss[historyNoisyOverFit.history.val_loss.length - 1];
     plotPredictions('prediction-overfit-train', modelNoisyOverFit, xTrain, yTrainNoisy, 'Training Data', mseNoisyOverFitTrain, mseNoisyOverFitTrain);
-    plotPredictions('prediction-overfit-test', modelNoisyOverFit, xTest, yTestNoisy, 'Test Data', mseNoisyOverFitTest, mseNoisyOverFitTest);
+    plotPredictions('prediction-overfit-test', modelNoisyOverFit, xTest, yTestNoisy, 'Test Data', mseNoisyOverFitTest, mseNoisyOverFitTest, 'cyan');
 
     document.getElementById('download-model-overfit').addEventListener('click', () => {
         modelNoisyOverFit.save('downloads://overfit-model');
