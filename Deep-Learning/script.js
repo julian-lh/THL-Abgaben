@@ -139,24 +139,36 @@ async function run() {
     const historyClean = await trainModel(modelClean, xTrainTensor, yTrainTensor, 100, xTestTensor, yTestTensor);
     const mseCleanTrain = historyClean.history.loss[historyClean.history.loss.length - 1];
     const mseCleanTest = historyClean.history.val_loss[historyClean.history.val_loss.length - 1];
-    plotPredictions('prediction-clean-train', modelClean, xTrain, yTrain, '(Clean Training)', mseCleanTrain, mseCleanTrain);
-    plotPredictions('prediction-clean-test', modelClean, xTest, yTest, '(Clean Test)', mseCleanTest, mseCleanTest);
+    plotPredictions('prediction-clean-train', modelClean, xTrain, yTrain, 'Training Data', mseCleanTrain, mseCleanTrain);
+    plotPredictions('prediction-clean-test', modelClean, xTest, yTest, 'Test Data', mseCleanTest, mseCleanTest);
+
+    document.getElementById('download-model-clean').addEventListener('click', () => {
+        modelClean.save('downloads://clean-model');
+    });
 
     // Training noisy Daten (Best-Fit)
     const modelNoisyBestFit = createModel();
     const historyNoisyBestFit = await trainModel(modelNoisyBestFit, xTrainTensor, yTrainNoisyTensor, 50, xTestTensor, yTestNoisyTensor);
     const mseNoisyBestFitTrain = historyNoisyBestFit.history.loss[historyNoisyBestFit.history.loss.length - 1];
     const mseNoisyBestFitTest = historyNoisyBestFit.history.val_loss[historyNoisyBestFit.history.val_loss.length - 1];
-    plotPredictions('prediction-best-train', modelNoisyBestFit, xTrain, yTrainNoisy, '(Best-Fit Training)', mseNoisyBestFitTrain, mseNoisyBestFitTrain);
-    plotPredictions('prediction-best-test', modelNoisyBestFit, xTest, yTestNoisy, '(Best-Fit Test)', mseNoisyBestFitTest, mseNoisyBestFitTest);
+    plotPredictions('prediction-best-train', modelNoisyBestFit, xTrain, yTrainNoisy, 'Training Data', mseNoisyBestFitTrain, mseNoisyBestFitTrain);
+    plotPredictions('prediction-best-test', modelNoisyBestFit, xTest, yTestNoisy, 'Test Data', mseNoisyBestFitTest, mseNoisyBestFitTest);
+
+    document.getElementById('download-model-best-fit').addEventListener('click', () => {
+        modelNoisyBestFit.save('downloads://best-fit-model');
+    });
 
     // Training noisy Daten (Over-Fit)
     const modelNoisyOverFit = createModel();
     const historyNoisyOverFit = await trainModel(modelNoisyOverFit, xTrainTensor, yTrainNoisyTensor, 200, xTestTensor, yTestNoisyTensor);
     const mseNoisyOverFitTrain = historyNoisyOverFit.history.loss[historyNoisyOverFit.history.loss.length - 1];
     const mseNoisyOverFitTest = historyNoisyOverFit.history.val_loss[historyNoisyOverFit.history.val_loss.length - 1];
-    plotPredictions('prediction-overfit-train', modelNoisyOverFit, xTrain, yTrainNoisy, '(Over-Fit Training)', mseNoisyOverFitTrain, mseNoisyOverFitTrain);
-    plotPredictions('prediction-overfit-test', modelNoisyOverFit, xTest, yTestNoisy, '(Over-Fit Test)', mseNoisyOverFitTest, mseNoisyOverFitTest);
+    plotPredictions('prediction-overfit-train', modelNoisyOverFit, xTrain, yTrainNoisy, 'Training Data', mseNoisyOverFitTrain, mseNoisyOverFitTrain);
+    plotPredictions('prediction-overfit-test', modelNoisyOverFit, xTest, yTestNoisy, 'Test Data', mseNoisyOverFitTest, mseNoisyOverFitTest);
+
+    document.getElementById('download-model-overfit').addEventListener('click', () => {
+        modelNoisyOverFit.save('downloads://overfit-model');
+    });
 }
 
 run();
