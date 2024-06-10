@@ -119,6 +119,7 @@ function plotPredictions(divId, model, xData, yData, title, mse, loss) {
 
 async function loadAndPredict(modelPath, xTrain, yTrain, xTest, yTest, divTrainId, divTestId) {
     const model = await tf.loadLayersModel(modelPath);
+    model.compile({ optimizer: tf.train.adam(0.01), loss: 'meanSquaredError' });
     const mseTrain = model.evaluate(tf.tensor2d(xTrain, [xTrain.length, 1]), tf.tensor2d(yTrain, [yTrain.length, 1]), { verbose: 0 });
     const mseTest = model.evaluate(tf.tensor2d(xTest, [xTest.length, 1]), tf.tensor2d(yTest, [yTest.length, 1]), { verbose: 0 });
 
