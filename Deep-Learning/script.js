@@ -49,7 +49,19 @@ function createModel() {
     return model;
 }
 
+function createModel2() {
+    const model = tf.sequential();
+    model.add(tf.layers.dense({ units: 100, activation: 'relu', inputShape: [1] }));
+    model.add(tf.layers.dense({ units: 100, activation: 'relu' }));
+    model.add(tf.layers.dense({ units: 100, activation: 'relu' }));
+    model.add(tf.layers.dense({ units: 100, activation: 'relu' }));
+    model.add(tf.layers.dense({ units: 1, activation: 'linear' }));
+    model.compile({ optimizer: tf.train.adam(0.01), loss: 'meanSquaredError' });
+    return model;
+}
+
 async function trainModel(model, xTrain, yTrain, epochs, xTest, yTest) {
+
     return await model.fit(xTrain, yTrain, {
         epochs,
         validationData: [xTest, yTest],
@@ -147,7 +159,7 @@ async function run() {
     });
 
     // Training noisy Daten (Best-Fit)
-    const modelNoisyBestFit = createModel();
+    const modelNoisyBestFit = createModel2();
     const historyNoisyBestFit = await trainModel(modelNoisyBestFit, xTrainTensor, yTrainNoisyTensor, 50, xTestTensor, yTestNoisyTensor);
     const mseNoisyBestFitTrain = historyNoisyBestFit.history.loss[historyNoisyBestFit.history.loss.length - 1];
     const mseNoisyBestFitTest = historyNoisyBestFit.history.val_loss[historyNoisyBestFit.history.val_loss.length - 1];
@@ -159,7 +171,7 @@ async function run() {
     });
 
     // Training noisy Daten (Over-Fit)
-    const modelNoisyOverFit = createModel();
+    const modelNoisyOverFit = createModel2();
     const historyNoisyOverFit = await trainModel(modelNoisyOverFit, xTrainTensor, yTrainNoisyTensor, 200, xTestTensor, yTestNoisyTensor);
     const mseNoisyOverFitTrain = historyNoisyOverFit.history.loss[historyNoisyOverFit.history.loss.length - 1];
     const mseNoisyOverFitTest = historyNoisyOverFit.history.val_loss[historyNoisyOverFit.history.val_loss.length - 1];

@@ -28,6 +28,10 @@
         </div>
         <div class="card mb-4" style="border-radius: 10px;">
             <div class="card-body">
+                <!-- <div class="spinner-border text-primary position-absolute top-50 start-50 translate-middle d-none"
+                    role="status" id="spinner-clean">
+                    <span class="visually-hidden">Loading...</span>
+                </div> -->
                 <div class="row">
                     <h4 class="text-center">Prediction Clean Data</h4>
                     <div class="col-md-6">
@@ -48,6 +52,10 @@
         </div>
         <div class="card mb-4" style="border-radius: 10px;">
             <div class="card-body">
+                <!-- <div class="spinner-border text-primary position-absolute top-50 start-50 translate-middle d-none"
+                    role="status" id="spinner-best-fit">
+                    <span class="visually-hidden">Loading...</span>
+                </div> -->
                 <div class="row">
                     <h4 class="text-center">Prediction Best-Fit</h4>
                     <div class="col-md-6">
@@ -68,6 +76,10 @@
         </div>
         <div class="card mb-4" style="border-radius: 10px;">
             <div class="card-body">
+                <!-- <div class="spinner-border text-primary position-absolute top-50 start-50 translate-middle d-none"
+                    role="status" id="spinner-overfit">
+                    <span class="visually-hidden">Loading...</span>
+                </div> -->
                 <div class="row">
                     <h4 class="text-center">Prediction Over-Fit</h4>
                     <div class="col-md-6">
@@ -86,17 +98,25 @@
                 </div>
             </div>
         </div>
+        <!-- <div class="row mt-4 mb-4">
+            <div class="col-md-12 text-center">
+                <button id="train-new-models" class="btn btn-primary">Neue Modelle Trainieren</button>
+            </div>
+        </div> -->
         <div class="row mt-4">
             <div class="col-md-12">
                 <h4 class="text-center">Diskussion</h4>
                 <p class="text-justify">
-                    Die Parameter und Einstellungen wurden basierend auf den Anforderungen der Aufgabe festgelegt.
-                    Das Modell wurde mit zwei versteckten Schichten und je 100 Neuronen pro Schicht erstellt,
-                    um eine ausreichende Kapazität zur Modellierung der komplexen Funktion zu gewährleisten.
-                    Wir haben festgestellt, dass das Modell ohne Rauschen sehr gut generalisiert, während das Modell
+                    Das Modell wurde zu Beginn mit zwei versteckten Schichten und je 100 Neuronen pro Schicht erstellt,
+                    was den großen Vorteile eines schnellen Trainings bietet.
+                    Tests haben jedoch ergeben, dass entweder eine Erhöhung der Anzahl an Neuronen pro Schicht oder eine
+                    Erhöhung der Anzahl an Schichten erforderlich ist, um die Funktion besser zu modellieren. Für
+                    letzteres habe ich mich entschieden, sodass mein Modell 4 versteckte Schichten mit je 100 Neuronen
+                    besitzt.
+                    Ich habe festgestellt, dass das Modell ohne Rauschen sehr gut generalisiert, während das Modell
                     auf verrauschten Daten trainiert, anfälliger für Overfitting ist.
-                    Beim Training des Overfit-Modells haben wir eine deutliche Diskrepanz zwischen Trainings- und
-                    Testverlust beobachtet,
+                    Beim Training des Overfit-Modells kann man eine deutliche Diskrepanz zwischen Trainings- und
+                    Testverlust beobachten,
                     was auf eine Überanpassung hinweist. Das Best-Fit-Modell zeigt eine gute Balance zwischen Trainings-
                     und Testverlust,
                     was auf eine bessere Generalisierung hindeutet.
@@ -132,7 +152,7 @@
                         <li>Daten wurden generiert und in Trainings- und Testdatensätze aufgeteilt.</li>
                         <li>Gaussian Noise wurde zu den Ausgabewerten hinzugefügt, um verrauschte Datensätze zu
                             simulieren.</li>
-                        <li>Ein FFNN-Modell mit zwei versteckten Schichten und je 100 Neuronen wurde erstellt und mit
+                        <li>Ein FFNN-Modell mit vier versteckten Schichten und je 100 Neuronen wurde erstellt und mit
                             den Daten trainiert.</li>
                         <li>Ergebnisse wurden visualisiert und dokumentiert, um die Auswirkungen von Rauschen und
                             Overfitting zu untersuchen.</li>
