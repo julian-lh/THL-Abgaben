@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Wortvorhersage mit LSTM</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/danfojs/dist/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/danfojs@1.1.2/lib/bundle.min.js"></script>
+    <script src="main.js"></script>
+</head>
+
+<body>
+    <div>
+        <textarea id="inputText" placeholder="Geben Sie Ihren Text hier ein..."></textarea>
+        <button onclick="predictWord()">Vorhersage</button>
+        <button onclick="acceptWord()">Weiter</button>
+        <button onclick="autoPredict()">Auto</button>
+        <button onclick="stopAutoPredict()">Stopp</button>
+        <button onclick="reset()">Reset</button>
+    </div>
+    <div id="predictionResult"></div>
+</body>
+
+</html>
