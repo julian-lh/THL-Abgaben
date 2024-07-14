@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Prediction Interface</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .content {
+            flex: 1;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .text-input-area {
+            height: 150px;
+        }
+    </style>
+</head>
+<body>
+    <header class="bg-dark text-white text-center py-3">
+        <h1>Text Prediction Interface</h1>
+    </header>
+    <div class="content container mt-5">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="form-group d-flex">
+                    <textarea class="form-control text-input-area" id="textInput" placeholder="Type here..."></textarea>
+                    <button type="button" class="btn btn-primary ml-2">Vorhersage</button>
+                </div>
+                <div class="btn-group btn-group-toggle d-flex justify-content-between mb-3" data-toggle="buttons">
+                    <button type="button" class="btn btn-secondary w-100 mx-1">Option 1</button>
+                    <button type="button" class="btn btn-secondary w-100 mx-1">Option 2</button>
+                    <button type="button" class="btn btn-secondary w-100 mx-1">Option 3</button>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="btn-group-vertical w-100">
+                    <button type="button" class="btn btn-primary mb-2">Weiter</button>
+                    <button type="button" class="btn btn-primary mb-2">Auto / Stopp</button>
+                    <button type="button" class="btn btn-primary">Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Section 1</h5>
+                    <p>Explanation or description text for section 1.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Section 2</h5>
+                    <p>Explanation or description text for section 2.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Section 3</h5>
+                    <p>Explanation or description text for section 3.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
