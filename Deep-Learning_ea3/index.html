@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text Prediction Interface</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.20.0/dist/tf.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <style>
         body {
             display: flex;
@@ -34,50 +36,81 @@
             <div class="col-md-9">
                 <div class="form-group d-flex">
                     <textarea class="form-control text-input-area" id="inputText" placeholder="Type here..."></textarea>
-                    <button type="button" class="btn btn-primary ml-2" onclick="predictWord()">Vorhersage</button>
+                    <button type="button" class="btn btn-primary ml-2" onclick="predictWord()">Predict</button>
                 </div>
                 <div class="btn-group btn-group-toggle d-flex justify-content-between mb-3" data-toggle="buttons">
-                    <button type="button" class="btn btn-secondary w-100 mx-1" onclick="predictWord()">Prediction 1</button>
-                    <button type="button" class="btn btn-secondary w-100 mx-1" onclick="predictWord()">Prediction 2</button>
-                    <button type="button" class="btn btn-secondary w-100 mx-1" onclick="predictWord()">Prediction 3</button>
+                    <button type="button" class="btn btn-secondary w-100 mx-1" onclick="acceptWord()">Prediction 1</button>
+                    <button type="button" class="btn btn-secondary w-100 mx-1" onclick="acceptWord()">Prediction 2</button>
+                    <button type="button" class="btn btn-secondary w-100 mx-1" onclick="acceptWord()">Prediction 3</button>
                 </div>
                 <div id="predictionResult" class="text-center mb-3"></div>
             </div>
             <div class="col-md-3">
                 <div class="btn-group-vertical w-100">
-                    <button type="button" class="btn btn-primary mb-2" onclick="acceptWord()">Weiter</button>
+                    <button type="button" class="btn btn-primary mb-2" onclick="acceptWord()">Next</button>
                     <button type="button" class="btn btn-primary mb-2" onclick="autoPredict()">Auto</button>
-                    <button type="button" class="btn btn-primary mb-2" onclick="stopAutoPredict()">Stopp</button>
-                    <button type="button" class="btn btn-primary" onclick="reset()">Reset</button>
+                    <button type="button" class="btn btn-primary mb-2" onclick="stopAutoPredict()">Stop</button>
+                    <button type="button" class="btn btn-primary mb-2" onclick="reset()">Reset</button>
+                    <!-- <button type="button" class="btn btn-primary" onclick="startTraining()">Start Training</button>
+                    <button type="button" class="btn btn-primary" onclick="saveModel()">Download Model</button> -->
                 </div>
             </div>
+        </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h4 class="text-center">Dokumentation</h4>
+            <div>
+                <h5>Technisch</h5>
+                <p class="text-justify">
+                    Verwendete Frameworks:
+                <ul>
+                    <li>TensorFlow.js: Zum Erstellen und Trainieren des LSTM-Modells im Browser.</li>
+                    <li>Bootstrap: Für das responsive Layout und die Benutzeroberfläche.</li>
+                    <li>Plotly.js: Zur Visualisierung der Daten und Ergebnisse (optional, aber vorgesehen).</li>
+                    <li>jQuery: Für die DOM-Manipulation und Ereignissteuerung.</li>
+                </ul>
+                Technische Besonderheiten:
+                <ul>
+                    <li>Das Modell wurde zunächst versucht im Browser mit TensorFlow.js zu trainieren, was jedoch zu Performance-Problemen führte.</li>
+                    <li>Bootstrap wurde genutzt, um eine benutzerfreundliche und responsive Oberfläche zu gestalten.</li>
+                    <li>Aufgrund der technischen Einschränkungen konnte das Modell nicht vollständig in die Webanwendung integriert werden, was zur Nutzung eines separaten Jupyter Notebooks führte.</li>
+                </ul>
+                </p>
+            </div>
+            <div>
+                <h5>Fachlich</h5>
+                <p class="text-justify">
+                    Implementierung:
+                <ul>
+                    <li>Daten wurden geladen, in Sätze aufgeteilt und durch einen Tokenizer in Sequenzen umgewandelt.</li>
+                    <li>Diese Sequenzen wurden verwendet, um Trainingsdaten zu erstellen, die aus Eingabesequenzen und entsprechenden Zielwörtern bestehen.</li>
+                    <li>Ein LSTM-Modell mit zwei versteckten Schichten à 100 Neuronen wurde erstellt.</li>
+                    <li>Das Modell wurde mit einer Softmax-Ausgabeschicht versehen, um Wahrscheinlichkeiten für jedes Wort im Vokabular vorherzusagen.</li>
+                    <li>Der Adam-Optimizer mit einer Lernrate von 0.01 und der Categorical Cross-Entropy Loss wurden verwendet.</li>
+                    <li>Das Modell wurde im Browser mit TensorFlow.js trainiert. Aufgrund der Performance-Probleme wurde das Modell letztendlich in einem Jupyter Notebook mit TensorFlow und Keras erfolgreich trainiert.</li>
+                    <li>Eine Benutzeroberfläche wurde erstellt, die es dem Nutzer ermöglicht, Text einzugeben und Vorhersagen zu erhalten. Aufgrund der Modell-Ladeprobleme in TensorFlow.js wird die Vorhersage im Jupyter Notebook durchgeführt und die Ergebnisse manuell in die Webanwendung integriert.</li>
+                </ul>
+                Ergebnisse:
+                <ul>
+                    <li>Das Modell funktioniert im Jupyter Notebook wie erwartet unter Verwendung von TensorFlow und Keras.</li>
+                    <li>Trotz wochenlanger Versuche und Konsultation zahlreicher Web-Foren sowie Tools wie ChatGPT, blieben die Probleme bei der Übertragung des Modells in TensorFlow.js ungelöst.</li>
+                    <li>Die Website dient daher als GUI-Gerüst, während das eigentliche Modell im Jupyter Notebook implementiert und getestet wurde.</li>
+                    <li>Die Unfähigkeit, das Modell in die Webanwendung zu integrieren, stellt ein erhebliches Hindernis dar, das nicht überwunden werden konnte.</li>
+                </ul>
+                </p>
+            </div>
+        </div>
+        
+        <div class="row mt-4 text-center">
+            <p>Julian Lopes Hinz - Sommersemester 2024 - Medieninformatik TH Lübeck</p>
         </div>
     </div>
-    <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <h5>Section 1</h5>
-                    <p>Explanation or description text for section 1.</p>
-                </div>
-                <div class="col-md-4">
-                    <h5>Section 2</h5>
-                    <p>Explanation or description text for section 2.</p>
-                </div>
-                <div class="col-md-4">
-                    <h5>Section 3</h5>
-                    <p>Explanation or description text for section 3.</p>
-                </div>
-            </div>
-        </div>
-    </footer>
+</div>
+</div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-    <script type="module">
-        import { predictWord, acceptWord, autoPredict, stopAutoPredict, reset } from './app.js';
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>
